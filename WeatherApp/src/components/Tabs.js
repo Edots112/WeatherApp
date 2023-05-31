@@ -1,18 +1,20 @@
+/* eslint-disable react/no-unstable-nested-components */
 import React from 'react'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import CurrentWeather from '../screens/CurrentWeather'
 import UpcomingWeather from '../screens/UpcomingWeather'
 import City from '../screens/City'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Feather } from '@expo/vector-icons'
 
 const Tab = createBottomTabNavigator()
 
-const Tabs = () => {
+const Tabs = ({ weather }) => {
+  console.log(weather)
   return (
     <Tab.Navigator
       screenOptions={{
         tabBarActiveTintColor: 'tomato',
-        tabBarInactiveTintColor: 'grey',
+        tabBarInactiveTintColor: 'gray',
         tabBarStyle: {
           backgroundColor: 'lightblue'
         },
@@ -21,27 +23,27 @@ const Tabs = () => {
         },
         headerTitleStyle: {
           fontWeight: 'bold',
-          fontSize: 30,
+          fontSize: 25,
           color: 'tomato'
         }
       }}
     >
       <Tab.Screen
-        name="Current"
-        component={CurrentWeather}
+        name={'Current'}
         options={{
           tabBarIcon: ({ focused }) => (
             <Feather
-              name="droplet"
-              size={24}
-              color={focused ? 'blue' : 'black'}
+              name={'droplet'}
+              size={25}
+              color={focused ? 'tomato' : 'black'}
             />
           )
         }}
-      />
+      >
+        {() => <CurrentWeather weatherData={weather.list[0]} />}
+      </Tab.Screen>
       <Tab.Screen
         name={'Upcoming'}
-        component={UpcomingWeather}
         options={{
           tabBarIcon: ({ focused }) => (
             <Feather
@@ -51,10 +53,11 @@ const Tabs = () => {
             />
           )
         }}
-      />
+      >
+        {() => <UpcomingWeather weatherData={weather.list} />}
+      </Tab.Screen>
       <Tab.Screen
         name={'City'}
-        component={City}
         options={{
           tabBarIcon: ({ focused }) => (
             <Feather
@@ -64,7 +67,9 @@ const Tabs = () => {
             />
           )
         }}
-      />
+      >
+        {() => <City weatherData={weather.city} />}
+      </Tab.Screen>
     </Tab.Navigator>
   )
 }
